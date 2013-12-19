@@ -1,0 +1,6 @@
+H         - Show hit boxes
+Ctrl+D    - Debug console
+U         - Undo (delete, etc.)
+
+F3        - Show FPS and profiler! (in game too)
+Ctrl+P    - Pause (in game too)

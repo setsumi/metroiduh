@@ -1,0 +1,13 @@
+Project files are located in anura repository folder: vs2012\anura\
+
+* Remove libs (see libraries.png) from the root of the project.
+* Import file 'AnuraPropertySheet.props' in project properties manager.
+
+Project Settings:
+* General->Platform Toolset: Visual Studio 2012 - Windows XP (v110_xp)
+* C/C++->General->Warning Level: Level1 (/W1)
+
+Remove console and debug info:
+* Linker->System->SubSystem: Windows (/SUBSYSTEM:WINDOWS)
+* Linker->Debugging->Generate Debug Info: No
+* C/C++->General->Debug Information Format: None
