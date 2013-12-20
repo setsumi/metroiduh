@@ -1,0 +1,2 @@
+So what we're now doing is we're going to switch the "lever" objects over to it as well.  The nice little benefit is this will mean they no longer need to be manually connected to the objects which they trigger.  Instead, they'll just do a quick map(filter(level.chars, value.event = me.event), fire_event(value, 'triggered'))
+

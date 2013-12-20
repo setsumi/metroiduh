@@ -1,1 +1,1 @@
-FFL (*.cfg) syntax coloring file for AkelPad text editor.
+FFL (*.cfg) syntax coloring and autocomplete for AkelPad text editor.
