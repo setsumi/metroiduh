@@ -54,3 +54,14 @@ if(value is {boss_hitpoints: decimal}, value.boss_hitpoints, value.hitpoints))
 [18:58] <Jetrel> This is what milgram does.
 [18:59] * DDR nods.
 
+!!!!!
+[10:32] <Jetrel> DDR:  basically there's something broken afoot, where, now, if you try to query level.player for a stored event on the first frame of a level, it comes back null.
+[10:40] <Jetrel> Sirp:  seems to be any property, but we've definitely had issues with the get_stored_event(name) property in "player_controlled" (the prototype frogatto inherits from, which is also declared as the player_type in module.cfg).
+[10:42] <Sirp> note though that on_create is fired when the level starts and not all objects will be fully created at the point on_create is fired
+[10:45] <Jetrel> Sirp:  that, and "on_start_level" get used to have things like gates check the player to determine if their initial state is open or closed, and they've all got special code to avoid visually showing a transition, and just to instantly "set themselves" to the mode that's specified.
+
+
+[10:35] <DDR> It would just mean, in our case, that we wouldn't need to assign every lever-and-gate combination a variable in Frogatto.
+[10:43] <Jetrel> DDR:  in theoretical terms, I agree with that fear, in practical terms, I refuse to change it because we've lived with that system for roughly two years now, and due to how I name events (by always strictly prefixing them with the level name), it will never cause problems.  I agree with what you're saying, but I don't want to overhaul a working system for no gain, especially when I just finished a marathon overhaul.  I also don't want someone else who doesn't have all the danger points just paged into their head, the hard way, do an overhaul.
+
+
