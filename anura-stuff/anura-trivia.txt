@@ -1,3 +1,16 @@
+debug('Are we locked? ${is_locked}')
+
+[17:22] <DDR> Jetrel, do you know what the star in "on_mouse_down*" means?
+[17:22] <Jetrel> No, that seems really.... odd
+[17:33] <DDR> I bet it's to match even when the mouse event is outside the object too.
+[17:34] <DDR> on_mouse_down -> click *on* object, on_mouse_down* -> click *anywhere*.
+[17:34] <DDR> This menu thing is just opening up as a fractal of objects that need proper type handling.
+[17:38] <KristaS> DDR: That is a correct interpretation. Though those events should already have type information specified for the args.* parameters
+[17:39] <DDR> That's good. Yeah, the event isn't being the problem -- I just found it, and was like 'whut?'
+[17:39] <DDR> No Problems Here. :)
+[17:45] <DDR> KristaS: Actually, set(xy, zip([int] <- item.xy, cursor_offset, a+b)) needs the cast to [int], where item is object.
+
+
 [16:56] <Jetrel_laptop> Sirp:  yeah, the next big one I'm tackling is a conversion where we're going to change up all of our levers on the various levels to a new mechanism...  basically we've had this persistence issue, so we're changing over to *mandating* that all gates and so on are always persistent.  They always require you to give them an event.
 [16:57] <Jetrel_laptop> We did that for gates, already, prior to 1.3, and it solved a lot of issues.
 [16:58] <Jetrel_laptop> So what we're now doing is we're going to switch the "lever" objects over to it as well.  The nice little benefit is this will mean they no longer need to be manually connected to the objects which they trigger.  Instead, they'll just do a quick map(filter(level.chars, value.event = me.event), fire_event(value, 'triggered'))
@@ -59,7 +72,15 @@ if(value is {boss_hitpoints: decimal}, value.boss_hitpoints, value.hitpoints))
 [10:40] <Jetrel> Sirp:  seems to be any property, but we've definitely had issues with the get_stored_event(name) property in "player_controlled" (the prototype frogatto inherits from, which is also declared as the player_type in module.cfg).
 [10:42] <Sirp> note though that on_create is fired when the level starts and not all objects will be fully created at the point on_create is fired
 [10:45] <Jetrel> Sirp:  that, and "on_start_level" get used to have things like gates check the player to determine if their initial state is open or closed, and they've all got special code to avoid visually showing a transition, and just to instantly "set themselves" to the mode that's specified.
-
+[12:05] <Sirp> Jetrel: okay so the problem is the issue with on_create as I mentioned.
+[12:05] <Sirp> but I'm thinking maybe we have to revert on_create to just the previous behavior
+[12:05] <Sirp> but have a new on_init event
+[12:05] <Sirp> which is used to actually initialize objects.
+[12:06] <Sirp> and on_init will be different in that access must be quite limited. But can be used to construct initial state.
+[12:07] <Sirp> the downside is this kind of proliferation of event types makes things complicated. :(
+[12:10] <irker437> anura-engine: David White anura:master e4c57e2f77b7 / src/level.cpp: revert behavior of on_create http://git.io/XnppCA
+[12:10] <Sirp> Jetrel: okay should be fixed now
+[
 
 [10:35] <DDR> It would just mean, in our case, that we wouldn't need to assign every lever-and-gate combination a variable in Frogatto.
 [10:43] <Jetrel> DDR:  in theoretical terms, I agree with that fear, in practical terms, I refuse to change it because we've lived with that system for roughly two years now, and due to how I name events (by always strictly prefixing them with the level name), it will never cause problems.  I agree with what you're saying, but I don't want to overhaul a working system for no gain, especially when I just finished a marathon overhaul.  I also don't want someone else who doesn't have all the danger points just paged into their head, the hard way, do an overhaul.
