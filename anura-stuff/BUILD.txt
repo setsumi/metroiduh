@@ -6,8 +6,42 @@ Project files are located in anura repository folder: vs2012\anura\
 Project Settings:
 * General->Platform Toolset: Visual Studio 2012 - Windows XP (v110_xp)
 * C/C++->General->Warning Level: Level1 (/W1)
-
-Remove console and debug info:
-* Linker->System->SubSystem: Windows (/SUBSYSTEM:WINDOWS)
-* Linker->Debugging->Generate Debug Info: No
+* C/C++->General->Multi-processor Compilation: No
 * C/C++->General->Debug Information Format: None
+* Linker->Debugging->Generate Debug Info: No
+
+No console:
+* Linker->System->SubSystem: Windows (/SUBSYSTEM:WINDOWS)
+With Console:
+* Linker->System->SubSystem: Console (/SUBSYSTEM:CONSOLE)
+
+Source files:    
+* asserts.cpp(151): Insert lines:
+    //setsumi - disable loooong trace dump
+    return;
+* key_button.cpp: Save file as Unicode or it break on japanese system locale.
+
+
+
+I’ve previously posted on how to enable logging in the C++ project system in Visual Studio 2010.  In Visual Studio 2012 we’ve changed the way the Common Project System (aka “CPS”) emits trace messages so below I introduce an updated xml snippet that works in Visual Studio 2012.  Since CPS is now the project system driving JavaScript as well, the below xml snippet impacts that as well.
+
+To enable tracing, add the following xml block to devenv.exe.config file directly under the <configuration> root node, after the </configSections> end tag. Make sure to make a backup first so that you can revert back in case something goes wrong.  You may need to change "Warning" below with "Verbose" if you want verbose logging.
+
+<system.diagnostics>
+    <sources>
+        <source name="CPS" switchName="CPS" switchType="System.Diagnostics.SourceSwitch">
+            <listeners>
+                <add name="cpsFileLogger"/>
+            </listeners>
+        </source>
+    </sources>
+    <switches>
+        <add name="CPS" value="Warning"/>
+    </switches>
+    <sharedListeners>
+        <add name="cpsFileLogger" type="System.Diagnostics.TextWriterTraceListener" initializeData="c:\temp\devenv-cps.log">
+            <filter type="System.Diagnostics.EventTypeFilter" initializeData="Warning"/>
+        </add>
+    </sharedListeners>
+    <trace autoflush="true" indentsize="4" />
+</system.diagnostics>
