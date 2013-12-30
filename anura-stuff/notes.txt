@@ -1,0 +1,53 @@
+
+
+debug('Are we locked? ${is_locked}')
+
+
+
+spawn parameters note
+[spawn('explosion_big',  mid_x + 1d50 - 1d50, mid_y + 1d70 - 1d70, -facing),sound('BombExplode.wav')]),
+[spawn('explosion_big',  mid_x + 1d50 - 1d50, mid_y + 1d70 - 1d70, {facing:-facing, rotate: -45}),sound('BombExplode.wav')]),
+
+
+
+In level
+
+			"label": "boss_fight_controller",
+			"on_create": "if(level.player.get_stored_event('dungeon_crawling_faux_boss_fight_won'), [
+				remove_object(get_object(level,'robot_kitty')),
+				remove_object(me),
+			])",
+			"on_triggered": "if(not level.player.get_stored_event('dungeon_crawling_faux_boss_fight_won'),
+			[
+				map(level.gui, set(value.vars.bosses, value.vars.bosses + [get_object(level,'robot_kitty')])),
+				fire_event(get_object(level, 'gate1'), 'lock'),
+				music('neoBoss.ogg')
+			])",
+			"time_in_frame": 0,
+			"type": "level_controller",
+
+
+level.camera_position
+[2244, 0, 800, 600]     <-- x, y, width, height
+
+level.camera_target
+[224500, 9200]
+
+level.camera
+OUTPUT: (0852D810){screen_to_world: (08772688)(, , , ),
+position: [0.0, 0.0, 10.0],
+speed: 0.1,
+right: [1.0, 0.0, 0.0],
+direction: [0.0, 0.0, -1.0],
+horizontal_angle: 3.141592,
+hangle: 3.141592,
+vertical_angle: 0.0,
+vangle: 0.0,
+mouse_speed: 0.004999,
+target: [0.0, 0.0, 9.0],
+up: [0.0, 1.0, 0.0],
+fov: 45.0,
+aspect: 1.333333,
+clip_planes: [0.1, 300.0],
+type: 'perspective',
+ortho_window: [0, 800, 600, 0]}

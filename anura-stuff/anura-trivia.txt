@@ -1,4 +1,23 @@
-debug('Are we locked? ${is_locked}')
+[08:35] <Sirp> DDR / Jetrel_: okay so the problem when you go to the load door is just that the formula is rather messed up
+[08:36] <Sirp> and strict mode is detecting the error
+[08:40] <Sirp> DDR / Jetrel_: If you look in titlescreen.cfg, it goes set(child.event_handlers.enter_level, q( ...some formula... ))
+[08:40] <Sirp> the issue is 'some formula' has strings that include ${...} expressions in them.
+[08:40] <Sirp> the issue is that the ${...} expressions are going to get expanded at the time the outter q(...) string is parsed, NOT in the inner '...' string.
+[08:41] <Sirp> and at the q(...) time, the identifiers they reference aren't valid.
+[08:41] <Sirp> so, have to fix that. But then the q(...) formula is invalid in a number of other ways (mis-matched parens) and I can't immediately tell the intent to fix it.
+[08:41] <Sirp> it might be good to have an FFL syntax for a 'literal' string though
+[08:41] <Sirp> which doesn't do ${...} expansion
+[09:05] <DDR> D'OH. xD
+[09:05] <DDR> Sirp: What the formula is suppose to do, as far as I can tell, is set some text objects based on the properties of the saved levels.
+[09:06] <DDR> It use to be in an event handler in menu_selector_load_level, but that object was horribly out-of-date compared to menu_selector.
+[09:08] <DDR> The only difference that mattered, were two event handlers. Normally, this would go in the level file, and be a custom event of that object. But, here, since we have to create the object dynamically, we have to set the events in the level file that contains the object creating the menu_selector.
+[09:13] <Sirp> DDR: beats me what it's meant to do
+[09:14] <DDR> It's trying to spawn a few objects that tell you what the savegame you are loading is.
+[09:14] <DDR> The second event actually loads the game.
+[09:18] * Phanterm (~Karasawa@210.165.0.242) Quit
+[09:19] <DDR> The way that selector works is that it reads some saved data and spawns the menu items based on that, and then when we select one the finish_menu event is fired.
+[09:24] <DDR> Anyway, I removed the ${} interpolation.
+
 
 [17:22] <DDR> Jetrel, do you know what the star in "on_mouse_down*" means?
 [17:22] <Jetrel> No, that seems really.... odd
