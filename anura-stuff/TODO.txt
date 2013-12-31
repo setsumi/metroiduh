@@ -1,0 +1,5 @@
+TODO:
+
+DONE:
+Rename swamp_greenman -> slimeman_green to remove useless area mention.
+
