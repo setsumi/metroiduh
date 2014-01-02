@@ -1,3 +1,138 @@
+
+
+
+**********************************************************************************************************
+definition:
+elastic_collision: "def( obj hittable the_other_object, {multiplier: decimal, constraint: {min: decimal, max: decimal}|null} params ) -> commands
+  ([set(velocity_x, radius * cos(angle)), set(velocity_y, radius * sin(angle))]
+  where angle = lib.math.angle(the_other_object, me) where radius = if(params.constraint, lib.math.constrain(params.constraint.min, params.multiplier * velocity_magnitude , params.constraint.max), params.multiplier * velocity_magnitude) )  where velocity_magnitude = hypot(velocity_x,velocity_y)",
+
+call:
+elastic_collision(collide_with, {multiplier: 0.5, constraint: {min: 0, max: 1500} } )
+
+**********************************************************************************************************
+properties: {
+        altitude_adjustment: "(wave(cycle*5+1000)/30)",  // <-- Executes every cycle!!!
+},
+
+**********************************************************************************************************
+lib2d access and type conversion
+lib.math.round(1.5)
+
+round: "def(decimal num) -> int if(num <= 0,
+	if(num <= (int(num) - 0.5), (int(num) - 1), int(num)),
+	if(num >= (int(num) + 0.5), (int(num) + 1), int(num))
+)",
+
+**********************************************************************************************************
+on_create: "[add_particles('bubbles'), add_particles('fizz')]",
+animation: {
+  id: "normal",
+  frames: 1,
+  duration: 50,
+},
+particle_system: [
+	{
+		id: "bubbles",
+		type: "water",
+		number_of_particles: 100,
+		repeat_period: 200,
+		velocity_y: -1,
+		velocity_x: 0,
+		velocity_rand: 4,
+		dot_size: 2,
+		color: [120,250,200,200],
+	},
+	{
+		id: "fizz",
+		type: "simple",
+		spawn_rate: 600,
+		time_to_live: 80,
+		min_x: -60,
+		max_x: 260,
+		min_y: -15,
+		max_y: 15,
+		velocity_y: -200,
+		velocity_x: 260,
+		velocity_x_random: 200,
+		velocity_y_random: 400,
+		accel_y: -10,
+		delta_a: 2,
+		animation: {
+			id: "sparkle",
+			image: "effects/particles.png",
+			rect: [3,93,9,99],
+			pad: 3,
+			frames: 5,
+			frames_per_row: 5,
+			scale: 2,
+			duration: 8,
+		},
+	},
+],
+
+**********************************************************************************************************
+move_to_standing() // move down until standing on surface
+
+**********************************************************************************************************
+serializable: false,
+dies_on_inactive: true,
+
+**********************************************************************************************************
+sound_file: { type: "string|null", default: null, editor_info: { type: "enum", enum_values: @eval map(get_files_in_dir('sounds/ambient'), 'ambient/'+value) } },
+
+**********************************************************************************************************
+debug('Are we locked? ${is_locked}')
+
+**********************************************************************************************************
+spawn parameters note
+[spawn('explosion_big',  mid_x + 1d50 - 1d50, mid_y + 1d70 - 1d70, -facing),sound('BombExplode.wav')]),
+[spawn('explosion_big',  mid_x + 1d50 - 1d50, mid_y + 1d70 - 1d70, {facing:-facing, rotate: -45}),sound('BombExplode.wav')]),
+
+**********************************************************************************************************
+In level
+
+			"label": "boss_fight_controller",
+			"on_create": "if(level.player.get_stored_event('dungeon_crawling_faux_boss_fight_won'), [
+				remove_object(get_object(level,'robot_kitty')),
+				remove_object(me),
+			])",
+			"on_triggered": "if(not level.player.get_stored_event('dungeon_crawling_faux_boss_fight_won'),
+			[
+				map(level.gui, set(value.vars.bosses, value.vars.bosses + [get_object(level,'robot_kitty')])),
+				fire_event(get_object(level, 'gate1'), 'lock'),
+				music('neoBoss.ogg')
+			])",
+			"time_in_frame": 0,
+			"type": "level_controller",
+
+**********************************************************************************************************
+level.camera_position
+[2244, 0, 800, 600]     <-- x, y, width, height
+
+level.camera_target
+[224500, 9200]
+
+level.camera
+OUTPUT: (0852D810){screen_to_world: (08772688)(, , , ),
+position: [0.0, 0.0, 10.0],
+speed: 0.1,
+right: [1.0, 0.0, 0.0],
+direction: [0.0, 0.0, -1.0],
+horizontal_angle: 3.141592,
+hangle: 3.141592,
+vertical_angle: 0.0,
+vangle: 0.0,
+mouse_speed: 0.004999,
+target: [0.0, 0.0, 9.0],
+up: [0.0, 1.0, 0.0],
+fov: 45.0,
+aspect: 1.333333,
+clip_planes: [0.1, 300.0],
+type: 'perspective',
+ortho_window: [0, 800, 600, 0]}
+
+**********************************************************************************************************
 custom_object_type::custom_object_type(const std::string& id, variant node, const custom_object_type* base_type, const custom_object_type* old_type)
   : id_(id),
 	hitpoints_(node["hitpoints"].as_int(1)),
@@ -54,65 +189,3 @@ custom_object_type::custom_object_type(const std::string& id, variant node, cons
 	is_shadow_(node["is_shadow"].as_bool(false)),
 	true_z_(node["truez"].as_bool(false)), tx_(node["tx"].as_decimal().as_float()), 
 	ty_(node["ty"].as_decimal().as_float()), tz_(node["tz"].as_decimal().as_float())
-
-
-
-move_to_standing() // move down until standing on surface
-
-
-serializable: false,
-dies_on_inactive: true,
-
-
-sound_file: { type: "string|null", default: null, editor_info: { type: "enum", enum_values: @eval map(get_files_in_dir('sounds/ambient'), 'ambient/'+value) } },
-
-
-debug('Are we locked? ${is_locked}')
-
-
-spawn parameters note
-[spawn('explosion_big',  mid_x + 1d50 - 1d50, mid_y + 1d70 - 1d70, -facing),sound('BombExplode.wav')]),
-[spawn('explosion_big',  mid_x + 1d50 - 1d50, mid_y + 1d70 - 1d70, {facing:-facing, rotate: -45}),sound('BombExplode.wav')]),
-
-
-In level
-
-			"label": "boss_fight_controller",
-			"on_create": "if(level.player.get_stored_event('dungeon_crawling_faux_boss_fight_won'), [
-				remove_object(get_object(level,'robot_kitty')),
-				remove_object(me),
-			])",
-			"on_triggered": "if(not level.player.get_stored_event('dungeon_crawling_faux_boss_fight_won'),
-			[
-				map(level.gui, set(value.vars.bosses, value.vars.bosses + [get_object(level,'robot_kitty')])),
-				fire_event(get_object(level, 'gate1'), 'lock'),
-				music('neoBoss.ogg')
-			])",
-			"time_in_frame": 0,
-			"type": "level_controller",
-
-
-level.camera_position
-[2244, 0, 800, 600]     <-- x, y, width, height
-
-level.camera_target
-[224500, 9200]
-
-level.camera
-OUTPUT: (0852D810){screen_to_world: (08772688)(, , , ),
-position: [0.0, 0.0, 10.0],
-speed: 0.1,
-right: [1.0, 0.0, 0.0],
-direction: [0.0, 0.0, -1.0],
-horizontal_angle: 3.141592,
-hangle: 3.141592,
-vertical_angle: 0.0,
-vangle: 0.0,
-mouse_speed: 0.004999,
-target: [0.0, 0.0, 9.0],
-up: [0.0, 1.0, 0.0],
-fov: 45.0,
-aspect: 1.333333,
-clip_planes: [0.1, 300.0],
-type: 'perspective',
-ortho_window: [0, 800, 600, 0]}
