@@ -1,3 +1,22 @@
+[19:14] <Jetrel> Sirp:  formula_function.cpp:3771 ASSERTION FAILED: Function call argument 4 does not match. Function expects bool provided string At modules/frogatto/data/objects/effects/control/text_controller.cfg 33:
+[19:14] <Jetrel> text(txt, font, size, align)
+[19:15] <Jetrel> Sirp:  align is a string of the set: ["left", "center", "right"] - not a bool.
+
+
+[17:13] <Jetrel> Sirp:  is there a value one can query to tell if an object is attached to a level?
+[17:15] <Sirp> Jetrel: no, you can just look for it in the level's list of objects
+[17:15] <Jetrel> Okay.
+
+
+[16:46] <Jetrel> Hmm, so I'm thinking the problem with the anthills is that because objects are no longer changing type, the stored references to the ants become hanging refs after they're swallowed.
+[16:47] <Jetrel> Anthills are one of the few spawners that - rather than filtering level.chars for spawned mooks in a certain rectangular box, they instead add them to a list after spawning them.
+[16:47] <Jetrel> So I expect it goes like:
+[16:47] <Jetrel> 1] child spawned, ref added to anthill's list
+[16:48] <Jetrel> 2] child swallowed.  Object removed by frogatto, but not deleted since the ref persists.
+[16:49] <Jetrel> 3] frogatto replaces the child with a brand-new object..  but the brand-new object is no longer tracked by the anthill.  Instead the anthill is tracking the old object, which is now in limbo, no longer connected to the level.
+[16:50] * Jetrel muses on this.
+
+
 [12:30] <DDR> Jetrel: OK, so having given some thoughts to the basement-ant problem...
 [12:31] <Jetrel> k
 [12:31] <DDR> How in the world do we track if the ants have been killed?
