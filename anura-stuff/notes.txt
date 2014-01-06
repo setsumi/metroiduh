@@ -1,4 +1,123 @@
 **********************************************************************************************************
+In level file:
+"label": "nene_npc",
+"on_freak_out": "transient_speech_dialog(self, [~If that gets in the batter,\\nI swear...~])",
+"on_start_level": "begin_script('ants_in_house_check')",
+
+#	"script": {
+#		"id": "ants_in_house_check",
+#		"modification": {
+#			"on_leave_spit_anim": "if(can_see(level, me, get_object(level, 'nene_npc')) and me.swallowed and 
+#									(me.swallowed.basic_type in
+#									['ant_black','ant_red','ant_gold','ant_platform_red']),
+#										fire_event(get_object(level,'nene_npc'),'freak_out'))",
+#			"target": "level.player"
+#		}
+#	},
+
+**********************************************************************************************************
+elastic_collision() ???
+
+**********************************************************************************************************
+ Made throwable objects respect cooldowns - switched cooldowns to depending on the level.cycle, rather than cycle, because it turns out a short-lived thrown object, upon comparing to itself, may (almost certainly will at point-blank range) have a value for cycles less than the value of the cooldown. Thrown objects now behave correctly for damage types.
+
+**********************************************************************************************************
+	damage_tables: "{ string -> {neutral:decimal, fire:decimal, energy:decimal, acid:decimal, impact:decimal, lacerate:decimal} } ::
+						{	
+							'bug' : {		neutral: 1.0,
+											fire: 0.75,
+											energy: 1.0,
+											acid: 1.25,
+											impact: 2.0,
+											lacerate: 0.25
+									},
+							'plant' : {		neutral: 1.0,
+											fire: 1.0,
+											energy: 0.5,
+											acid: 0.25,
+											impact: 0.0,
+											lacerate: 0.5
+									},
+							'mushroom' : {		neutral: 1.0,
+											fire: 1.0,
+											energy: 1.5,
+											acid: 0.0,
+											impact: 0.0,
+											lacerate: 1.0
+									},
+							'stone' : {		neutral: 1.0,
+											fire: 0.0,
+											energy: 0.1,
+											acid: 2.0,
+											impact: 1.0,
+											lacerate: 0.0
+									},
+							'milgramen' : {		neutral: 1.0,
+											fire: 0.75,
+											energy: 1.0,
+											acid: 0.75,
+											impact: 1.0,
+											lacerate: 1.0
+									},
+							'fish' : {		neutral: 1.0,
+											fire: 0.0,
+											energy: 1.5,
+											acid: 0.5,
+											impact: 0.5,
+											lacerate: 1.0
+									},
+							'mechanical' : {	neutral: 1.0,
+											fire: 0.0,
+											energy: 1.0,
+											acid: 1.5,
+											impact: 0.5,
+											lacerate: 0.0
+
+									},
+							'spectral' : {		neutral: 1.0,
+											fire: 0.0,
+											energy: 1.0,
+											acid: 0.0,
+											impact: 0.0,
+											lacerate: 0.0
+
+									},
+							'mammal' : {		neutral: 1.0,
+											fire: 1.0,
+											energy: 0.5,
+											acid: 1.5,
+											impact: 1.0,
+											lacerate: 1.0
+
+									},
+							'bird' : {		neutral: 1.0,
+											fire: 0.5,
+											energy: 0.5,
+											acid: 0.5,
+											impact: 1.0,
+											lacerate: 1.5
+
+									},
+						}",
+										
+
+
+
+	death_fx_table: "{string->string} :: {
+						'bug':			'bug', 
+						'plant':		'plant', 
+						'mushroom':		'mushroom',
+						'mammal':		'animal', 
+						'bird':			'animal', 
+						'fish':			'animal', 
+						'milgramen':	'milgramen',
+						'stone':		'medium',
+						'mechanical':	'medium',
+						'spectral':		'medium',
+					}",
+					
+					
+**********************************************************************************************************
 map(map_points, spawn('text_controller', value.x*2, value.y*2 + 40, facing,
                             [set(vars.txt, value.level_prettyname),set(vars.align, 'center')])),
 

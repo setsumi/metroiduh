@@ -1,4 +1,9 @@
 TODO:
+Look into and implement?
+"Moved the haptic rumble effect to a place where it will only be triggered by the player getting hurt, not by 'any object in the game' getting hurt."
+https://github.com/frogatto/frogatto/commit/5db8e89442d7a7b1f0916171c3bead018d516eca
+"Moved the visual-fx for getting hit to a better place in the call chain, allowing them to pass along the damage type."
+https://github.com/frogatto/frogatto/commit/b91da43d4eb16d4dabf94cc5c8a730d127c80092
 
 DONE:
 Rename swamp_greenman -> slimeman_green to remove useless area mention.

@@ -19,8 +19,9 @@ Source files:
 * asserts.cpp(151): Insert lines:
     //setsumi - disable loooong trace dump
     return;
-* key_button.cpp: Save file as Unicode with Signature or it break on japanese system locale.
+* key_button.cpp: Save file as "Unicode with Signature" or it break on japanese system locale.
 
-Replace anura\data\fonts\openfonts\FreeMono.ttf with Ubuntu Mono font.
+Font files:
+* Replace: anura\data\fonts\openfonts\FreeMono.ttf with "Ubuntu Mono" font.
 
 // EOF
