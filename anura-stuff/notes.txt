@@ -1,4 +1,8 @@
 **********************************************************************************************************
+#onetime level controllers are like the regular type, except with respawns=no set.  Meaning that their script only happens once per playthrough.
+
+
+**********************************************************************************************************
 In level file:
 "label": "nene_npc",
 "on_freak_out": "transient_speech_dialog(self, [~If that gets in the batter,\\nI swear...~])",
