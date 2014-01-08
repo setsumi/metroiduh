@@ -1,3 +1,52 @@
+[16:26] <DDR> "on_interact": "if( (not level.player.get_stored_event('moth_boss_fight_won')),
+[16:26] <DDR>     [swallow_event(), level.player.scripted_move_to_x(988, 1, fire_event(me, 'script1'))]) asserting level.player is obj frogatto_playable",
+[16:26] <DDR> Why doesn't that change the error message about the type of level.player not having scripted_move_to_x?
+[16:26] <Jetrel_> I don't know - that's a Sirp question.
+[16:27] <Jetrel_> That function is in player_controlled_platformer_character
+[16:27] <Jetrel_> so it definitely should have it - check and see if the function is actually "for real" there, and not commented out or something.
+
+
+[18:18] <DDR> Oh, *that* mdistort!
+[18:18] <DDR> Uh, the ideal was that it would be a somewhat fire-and-forget way to add an axial motion distort to enemies.
+[18:19] <DDR> Or, really, any objects.
+[18:19] <Jetrel_> right, and didn't dave do some thing where you could store the associated variables for that within a library?
+[18:19] <DDR> I think it's a lib. It's been a bit.
+[18:20] <Jetrel_> okay, I'd like to polish that into a real unit.  If you could page in that knowledge that'd be cool.
+[18:20] <DDR> Anyway, you instantiate a new version of the library, then I think you have to hook it in to a few places, and you're good to go.
+[18:21] <DDR> it's in lib2d/data/classes/motion_distort.
+[18:21] <DDR> The class itself is probably already strict.
+[18:22] <DDR> Or almost strict?
+[18:22] <Jetrel_> because I notice you're setting vars related to it, and it doesn't run right now.
+[18:23] <Jetrel_> in the object, I mean
+[18:23] <DDR> The way it *worked* was that you created a local copy for the object, then called process() to update the motion distort based on where the object was.
+[18:24] <DDR> You could call stop_process if you wanted to remove the effect, say, if you wanted to use custom_draw for other things. It just zeros out the distortion matrix.
+[18:25] <DDR> I had a brick on a test level set to do this, but I'd be highly surprised if it were still around.
+[18:26] <DDR> test2.cfg
+[18:28] <DDR> Jetrel:             on_create: "set(self.vars.mdistort, construct('motion_distort'))",
+[18:28] <DDR>             on_process: "[
+[18:28] <DDR>                 mdistort.process(me),
+[18:28] <DDR>                 set(mid_xy, zip(level.player.ctrl_mice[0], level.camera_position[0:2], a+b)),
+[18:28] <DDR>             ]",
+[18:29] <DDR> That's test2.cfg, 167, btw, Jetrel.
+[18:29] <Jetrel_> DDR:  construct has to be namespaced - where is it from?
+[18:50] <Jetrel_> DDR:  again, I ask - what is "construct"?
+[18:50] <Jetrel_> 	set(self.vars.mdistort, construct('motion_distort')),
+[18:50] <DDR> Also, sorry, totally missed you the first time.
+[18:50] <Jetrel_> I can't find it anywhere.
+[18:50] <DDR> You have to "construct" a new edition of the library, so that the local variables don't get overwritten when you use the library a second time.
+[18:51] <Jetrel_> DDR:  so that's a built-in, then?
+[18:51] <DDR> Yeah.
+[18:51] <Jetrel_> .... okay
+[18:51] <DDR> The motion distortion library uses a few _private_variables, which need to be different for each object it's tracking.
+[18:52] <DDR> Think of it like new whatever() in Javascript. A bit, at least.
+[18:56] <DDR> Right. Just assign it to a storage-backed property, then?
+[18:58] <Jetrel_> DDR:  ... okay.
+https://github.com/frogatto/frogatto/commit/6aa43f68d6503dea461f22649963cdab6670698f
+
+
+[15:51] <Jetrel_> Also, I'm finding that "map for the 4th parameter to object/spawn" to be really a nice convenience.
+
+
 [19:14] <Jetrel> Sirp:  formula_function.cpp:3771 ASSERTION FAILED: Function call argument 4 does not match. Function expects bool provided string At modules/frogatto/data/objects/effects/control/text_controller.cfg 33:
 [19:14] <Jetrel> text(txt, font, size, align)
 [19:15] <Jetrel> Sirp:  align is a string of the set: ["left", "center", "right"] - not a bool.

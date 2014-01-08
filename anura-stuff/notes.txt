@@ -1,4 +1,11 @@
 **********************************************************************************************************
+Replaced some runtime casts in hittable with interfaces.
+
+-  final_damage_amount: "def(obj hittable|{damage_type: string} collide_with, int damage_amount) -> int if((damage_amount < armor) or me.is_invincible, 0, handle_damage_type_modifications( string <- collide_with.damage_type, handle_base_damage_reductions( damage_amount )))",
+
++  final_damage_amount: "def(interface {damage_type: string} collide_with, int damage_amount) -> int if((damage_amount < armor) or me.is_invincible, 0, handle_damage_type_modifications(collide_with.damage_type, handle_base_damage_reductions( damage_amount )))",
+
+**********************************************************************************************************
 #onetime level controllers are like the regular type, except with respawns=no set.  Meaning that their script only happens once per playthrough.
 
 
