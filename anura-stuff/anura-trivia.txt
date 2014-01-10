@@ -1,3 +1,17 @@
+[17:32] <DDR> Jetrel: OK, how do I initialize private properties from a spawn command? ASSERT FAIL: src/custom_object_functions.cpp:1209 ASSERTION FAILED: Illegal spawn of moth_small property _desired_height requires initialization
+[17:33] <Jetrel> DDR:  uhm, you should be able to do them via a replacement for the 4th parameter.
+[17:33] <DDR> OK.
+[17:33] <Jetrel> Instead of facing, you'd have {_private_property:  foobar})
+[17:33] <DDR> But I need that to set always_active.
+[17:34] <Jetrel> Yeah, apparently there's some sort of support for kinda-sorta-but-not-really this in the 5th parameter as well.
+[17:35] <DDR> It seems weird to specify a property as private and then have to access it.
+[17:39] <Jetrel> DDR:  it can't be set(), is the thing.
+[17:40] <Jetrel> Initialized?  sure.  Set at whenever time, no.
+[17:42] <Sirp> yeah a private property can be initialized when you create the object
+[17:42] <Sirp> I agree slightly weird. Just slightly
+[17:42] <DDR> hahaha
+[
+
 [16:26] <DDR> "on_interact": "if( (not level.player.get_stored_event('moth_boss_fight_won')),
 [16:26] <DDR>     [swallow_event(), level.player.scripted_move_to_x(988, 1, fire_event(me, 'script1'))]) asserting level.player is obj frogatto_playable",
 [16:26] <DDR> Why doesn't that change the error message about the type of level.player not having scripted_move_to_x?
