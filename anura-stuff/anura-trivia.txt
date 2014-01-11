@@ -1,3 +1,13 @@
+[17:55] <Jetrel> Sirp:  /Users/richard_kettering/Public/anura/src/formula.cpp:1128 ASSERTION FAILED: FUNCTION CALL ON EXPRESSION WHICH ISN'T GUARANTEED TO BE A FUNCTION: any AT At modules/frogatto/data/objects/enemies/experimental/gazer_grey.cfg 92:
+[17:55] <Jetrel> _mdistort.stop_process(me),
+[17:55] <Jetrel> ^-------------------------^
+[17:55] <Jetrel> 	_mdistort: { type: "object", init: "construct('motion_distort')", persistent: false },
+[17:55] <Jetrel> It's a library, but how can I "give it type" so that anura's aware of what's in it.
+[01:28] <Sirp> Jetrel: do you mean that motion_distort is a class?
+[01:28] <Sirp> Jetrel: you'd just make it of type class motion_distort
+[01:28] <Sirp> if you're using it as a library I'm not sure why you need this _mdistort variable? Just use lib.motion_distort ? Or does it actually hold state?
+
+
 [17:32] <DDR> Jetrel: OK, how do I initialize private properties from a spawn command? ASSERT FAIL: src/custom_object_functions.cpp:1209 ASSERTION FAILED: Illegal spawn of moth_small property _desired_height requires initialization
 [17:33] <Jetrel> DDR:  uhm, you should be able to do them via a replacement for the 4th parameter.
 [17:33] <DDR> OK.
@@ -10,7 +20,7 @@
 [17:42] <Sirp> yeah a private property can be initialized when you create the object
 [17:42] <Sirp> I agree slightly weird. Just slightly
 [17:42] <DDR> hahaha
-[
+
 
 [16:26] <DDR> "on_interact": "if( (not level.player.get_stored_event('moth_boss_fight_won')),
 [16:26] <DDR>     [swallow_event(), level.player.scripted_move_to_x(988, 1, fire_event(me, 'script1'))]) asserting level.player is obj frogatto_playable",
