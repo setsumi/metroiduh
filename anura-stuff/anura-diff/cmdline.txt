@@ -1,0 +1,94 @@
+F:\MAIN\Blitz\[REPO]\anura>anura.exe --help
+Frogatto engine version 1.2
+Build Options: box2d isomap lua save_png sdl2 shaders
+LOADING CONFIGURATION FROM master-config.cfg
+LOOKING IN 'modules/frogatto/module.cfg': 1
+SET PREFERENCES PATH: C:\Documents and Settings\Setsumi\Application Data/frogatto/
+EXPAND DATA PATHS
+EXPAND DATA PATHS
+PARSE ERROR: : Could not find file C:\Documents and Settings\Setsumi\Application Data/frogatto/preferences.cfg
+ARGS: --help
+Usage: anura.exe [OPTIONS]
+
+User options:
+      --config-path=PATH       sets the path to the user config dir
+      --fullscreen             starts in fullscreen mode
+      --height[=]NUM           sets the game window height to which contents
+                                 are scaled
+      --host                   set the game server host address
+      --[no-]joystick          enables/disables joystick support
+      --level[=]LEVEL_FILE     starts the game using the specified level file,
+                                 relative to the level path
+      --level-path=PATH        sets the path to the game level files
+      --[no-]music             enables/disables game music
+      --native                 one pixel in-game equals one pixel on monitor
+      --relay                  use the server as a relay in multiplayer rather
+                                 than trying to initiate direct connections
+      --[no-]resizable         allows/disallows to resize the game window
+      ----module-args=ARGS     map of arguments passed to the module
+      --scale                  enables an experimental pixel art interpolation
+                                 algorithm for scaling the game graphics (some
+                                 issues with this still have to be solved)
+      --[no-]send-stats        enables/disables sending game statistics over
+                                 the network
+      --server=URL             sets the server to use for the TBS client based
+                                 on the given url
+      --user=USERNAME          sets the username to use as part of the TBS
+                                 server and module system
+      --pass=PASSWORD          sets the password to use as part of the TBS
+                                 server and module system
+      --[no-]sound             enables/disables sound and music support
+      --widescreen             sets widescreen mode, increasing the game view
+                                 area for wide screen displays
+      --width[=]NUM            sets the game window width to which contents are
+                                 scaled
+      --windowed               starts in windowed mode
+      --wvga                   sets the display size to 800x480
+
+Diagnostic options:
+      --[no-]debug             enables/disables debug mode
+      --[no-]fps               enables/disables framerate display
+      --set-fps=FPS            sets the framerate to FPS
+      --potonly                use power of two-sized textures only
+      --textures16             use 16 bpp textures only (default on iPhone)
+      --textures32             use 32 bpp textures (default on PC/Mac)
+
+Developer options:
+      --benchmarks             runs all the engine's benchmarks (intended to
+                                 measure the speed of certain low-level
+                                 functions), only useful if you're actually
+                                 hacking on the engine to optimize the speed
+                                 of these
+      --benchmarks=NAME        runs a single named benchmark code
+      --[no-]compiled          enable or disable precompiled game data
+      --edit                   starts the game in edit mode.
+      --show-hitboxes          turns on the display of object hitboxes
+      --show-controls          turns on the display of iPhone control hitboxes
+      --simipad                changes various options to emulate an iPad
+                                 environment
+      --simiphone              changes various options to emulate an iPhone
+                                 environment
+      --no-autopause           Stops the game from pausing automatically
+                                 when it loses focus
+      --tests                  runs the game's unit tests and exits
+      --no-tests               skips the execution of unit tests on startup
+      --utility=NAME           runs the specified UTILITY( NAME ) code block,
+                                 such as compile_levels or compile_objects,
+                                 with the specified arguments
+        --[no-]assert_on_missing_sound (default: false)If true, missing sounds will be treated as a fatal error
+        --[no-]debug_custom_draw (default: false)Show debug visualization of custom drawing
+        --[no-]debug_shadows (default: false)Show debug visualization of shadow drawing
+        --[no-]editor_grid (default: true)Turns the editor grid on/off
+        --fakelag=0             Number of milliseconds of artificial lag to introduce to multiplayer
+        --global_frame_scale=2  Sets the global frame scales for all frames in all animations
+        --max_ffl_recursion=1000Maximum depth of FFL recursion
+        --msaa=0                Amount of multi-sampled AA to use in rendering
+        --[no-]respect_difficulty (default: false)
+        --[no-]strict_mode_warnings (default: false)If turned on, all objects will be run in strict mode, with errors non-fatal
+        --[no-]suppress_strict_mode (default: false)If turned on, turns off strict mode checking on all objects
+        --tbs_bot_delay_ms=100  Artificial delay for tbs bots
+        --[no-]tbs_game_exit_on_winner (default: false)If true, tbs games will immediately exit when there is a winner.
+        --tbs_server_delay_ms=100
+        --tbs_server_heartbeat_freq=10
+        --tile_size=16          Size of game tile edges
+        --vsync=0               Vertical synchronization setting. 0 = none. 1 = snc, -1 = late synchronizaiton.
