@@ -1,4 +1,10 @@
 **********************************************************************************************************
+on_create: "[set(platform_offsets,[0, -24, -24, 0]),
+    spawn('fountain_of_health.running_water_overlay',midpoint_x-6*facing,midpoint_y-56,facing),
+    spawn('sound_source_individual',mid_x,mid_y,{sound_file:'ambient/fountain-small.ogg'})]",
+
+
+**********************************************************************************************************
 Replaced some runtime casts in hittable with interfaces.
 
 -  final_damage_amount: "def(obj hittable|{damage_type: string} collide_with, int damage_amount) -> int if((damage_amount < armor) or me.is_invincible, 0, handle_damage_type_modifications( string <- collide_with.damage_type, handle_base_damage_reductions( damage_amount )))",
@@ -11,6 +17,7 @@ Replaced some runtime casts in hittable with interfaces.
 
 **********************************************************************************************************
 In level file:
+
 "label": "nene_npc",
 "on_freak_out": "transient_speech_dialog(self, [~If that gets in the batter,\\nI swear...~])",
 "on_start_level": "begin_script('ants_in_house_check')",

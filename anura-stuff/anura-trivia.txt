@@ -1,3 +1,16 @@
+[11:20] <Jetrel> The goal is that all sounds will consult a global lookup table where, according to the name of the sound, they pick a certain function for attenuation.
+[11:26] <Sirp> Jetrel: I'm afraid I'm confused what you mean by 'using a string'? You mean it looks up the function in a map using a string as a key?
+[11:27] <Jetrel> Sirp:  it composes the function name on the fly using a string
+[11:27] <Jetrel> where preset_function = _sound_defaults[sound_file] and me['_attenuate_' + _sound_defaults[sound_file]['distance_attenuation_function']]",
+[11:27] <Jetrel> and such a member would be:  distance_attenuation_function: 'linearly',
+[11:39] <Sirp> Jetrel: so it's likely there's a better way to do things. I'd have to look at your code in detail though to understand. In the mean time you can just go if(preset_function is function(int,int) -> int, ...
+[11:39] <Sirp> for instance
+[11:39] <Sirp> whatever the function signature you have is.
+[11:39] <Jetrel> ahhh, wonderful
+[11:40] <Sirp> you could also typedef the function signature in types.cfg
+[11:50] <Jetrel> yeah, that seems to have gotten me past that issue.
+
+
 [17:55] <Jetrel> Sirp:  /Users/richard_kettering/Public/anura/src/formula.cpp:1128 ASSERTION FAILED: FUNCTION CALL ON EXPRESSION WHICH ISN'T GUARANTEED TO BE A FUNCTION: any AT At modules/frogatto/data/objects/enemies/experimental/gazer_grey.cfg 92:
 [17:55] <Jetrel> _mdistort.stop_process(me),
 [17:55] <Jetrel> ^-------------------------^
