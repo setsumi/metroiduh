@@ -1,3 +1,26 @@
+[17:24] <Jetrel> Sirp:  our ants in nene's basement rely on custom events, written in the level file, to fire when they die and take care of the whole business of setting the event.
+[17:25] <Jetrel> Sirp:  but with the new system now, we of course lose all such events because we create an entirely new object.
+[17:32] <Sirp> Jetrel: well you can transfer custom event handlers over. They are held in the event_handlers variable.
+[17:32] <Jetrel> okay
+[17:32] <Jetrel> Sirp:  is this limited to *just* the ones that either:
+[17:33] <Jetrel> 1] manually get set via set(event_handlers, 'expression as a string')
+[17:33] <Jetrel> 2] get written into a level file
+[17:33] <Jetrel> -fin-
+[17:37] <Sirp> Jetrel: yes.
+[17:37] <Jetrel> sweet.
+[17:37] <Jetrel> I'm gonna try this.
+[17:38] <Sirp> so e.g. set(event_handlers.process, "debug('hello')")
+[17:51] <Jetrel> hmm, having some trouble with this...  testing something...
+[17:54] <Jetrel> Sirp:  hmm, I've been trying to do that via the property map.
+[17:58] <Jetrel> Sirp:  yeah, it doesn't seem to work.
+[17:59] <Jetrel> Sirp:  want me to commit a test case?
+[17:59] * Jetrel assumes yes
+[18:00] <irker460> frogatto: Richard Kettering frogatto:master 51d8d9204167 / data/ (level/Seaside/nenes-basement.cfg objects/playable/frogatto_playable.cfg): Test case for one of the ants in nenes-basement getting events passed along. http://git.io/_JIA8w
+[18:06] <Jetrel> Sirp:  so basically I have an on_process event for the ant up on the ledge which is a simple "debug(cycle)", and it tries to do both methods for copying it from the "collide_obj" prior to the swallow, into the "throwable_obj" after the swallow.  If it had been copied, one should see a new set of numbers get debugged afterwards
+[18:08] <Jetrel> Okay, I just tested the other properties, and they are, indeed, being copied over correctly (e.g. hitpoints) - Just sanity-checked that we weren't "failing to copy anything".
+
+
+
 [11:20] <Jetrel> The goal is that all sounds will consult a global lookup table where, according to the name of the sound, they pick a certain function for attenuation.
 [11:26] <Sirp> Jetrel: I'm afraid I'm confused what you mean by 'using a string'? You mean it looks up the function in a map using a string as a key?
 [11:27] <Jetrel> Sirp:  it composes the function name on the fly using a string

@@ -1,4 +1,11 @@
 **********************************************************************************************************
+on_process:"
+	if(13 in ctrl_keys or ' ' in ctrl_keys,
+		fire_event('finish_menu')
+	)",
+
+
+**********************************************************************************************************
 on_create: "[set(platform_offsets,[0, -24, -24, 0]),
     spawn('fountain_of_health.running_water_overlay',midpoint_x-6*facing,midpoint_y-56,facing),
     spawn('sound_source_individual',mid_x,mid_y,{sound_file:'ambient/fountain-small.ogg'})]",
