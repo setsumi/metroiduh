@@ -1,3 +1,12 @@
+[16:15] <Jetrel> I also suspect we'll need to keep level_controllers non-strict, or we'll essentially need to come up with some way to "cheat out of" the strict-mode requirement of "every variable must be named", for just doing random variable storage in them.
+[16:16] <Jetrel> i.e. {string -> any}
+[16:16] <Jetrel> Because that is really something they tend to get used for - I'd overwhelmingly opt for the latter, since strict mode would afford them a ton of benefits besides that.
+[16:17] <Jetrel> Plus we'd then actually be able to axe vars forever, etc.
+[16:18] <Sirp> Jetrel: I'd just suggest having a property called 'flags' or something which is a {string -> any}
+[16:18] * Jetrel nods.
+[16:18] <Jetrel> Yup, sounds like it'd do the trick.
+
+
 [17:24] <Jetrel> Sirp:  our ants in nene's basement rely on custom events, written in the level file, to fire when they die and take care of the whole business of setting the event.
 [17:25] <Jetrel> Sirp:  but with the new system now, we of course lose all such events because we create an entirely new object.
 [17:32] <Sirp> Jetrel: well you can transfer custom event handlers over. They are held in the event_handlers variable.
@@ -18,7 +27,22 @@
 [18:00] <irker460> frogatto: Richard Kettering frogatto:master 51d8d9204167 / data/ (level/Seaside/nenes-basement.cfg objects/playable/frogatto_playable.cfg): Test case for one of the ants in nenes-basement getting events passed along. http://git.io/_JIA8w
 [18:06] <Jetrel> Sirp:  so basically I have an on_process event for the ant up on the ledge which is a simple "debug(cycle)", and it tries to do both methods for copying it from the "collide_obj" prior to the swallow, into the "throwable_obj" after the swallow.  If it had been copied, one should see a new set of numbers get debugged afterwards
 [18:08] <Jetrel> Okay, I just tested the other properties, and they are, indeed, being copied over correctly (e.g. hitpoints) - Just sanity-checked that we weren't "failing to copy anything".
-
+ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
+[15:00] <Jetrel> Sirp:  so I still have that problem I mentioned last night after you headed to bed.
+[15:00] <Jetrel> Sirp: setting event_handlers doesn't seem to work - I've uploaded a test case in nene's-basement
+[15:01] <Jetrel> Sirp:  there's an ant in the upper-right ledge which now has on_process: "debug(cycle)".
+[15:02] <Jetrel> Sirp:  inside frogatto_playable.cfg:1963, there's a line of code to copy over the event_handlers - there's another line on 1964; neither is working.
+[15:02] <Jetrel> Sirp:  so one you swallow the ant, those don't get copied over to the throwable version
+[15:03] <DDR> Jetrel: Don't you just set 'process'?
+[15:03] <DDR> Instead of 'on_process'?
+[15:04] <Jetrel> DDR:  I'm setting neither - I'm doing set(event_handlers, source_object.event_handlers) - copying the entire block from one to the other.
+[15:04] <Jetrel> As sirp suggested.
+[15:26] <Sirp> Jetrel: yeah you can't ocpy the entire event_handlers. You have to copy specific events.
+[15:27] <Jetrel> Sirp:  Well, that kinda stinks, because then that requires foreknowledge, on the level-creator's part, of which events will be copied, and which won't.
+[15:29] <Sirp> yeah so need way to enumerate events
+[15:35] <Sirp> Jetrel: actually what the heck, I'll just allow wholesale assignment like you're doing now
+[15:36] <Jetrel> Nice.
+[15:36] <Sirp> Jetrel: okay your code should work now
 
 
 [11:20] <Jetrel> The goal is that all sounds will consult a global lookup table where, according to the name of the sound, they pick a certain function for attenuation.
