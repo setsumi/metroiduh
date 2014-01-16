@@ -6,5 +6,11 @@ https://github.com/frogatto/frogatto/commit/5db8e89442d7a7b1f0916171c3bead018d51
 https://github.com/frogatto/frogatto/commit/b91da43d4eb16d4dabf94cc5c8a730d127c80092
 
 DONE:
+
+water image:
+http://www.pasteall.org/pic/65334
+water.cpp
+http://www.pasteall.org/48780/cpp
+
 Rename swamp_greenman -> slimeman_green to remove useless area mention.
 

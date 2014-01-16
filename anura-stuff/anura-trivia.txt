@@ -1,3 +1,87 @@
+[14:29] <Fei-FW> Player and enemies are slowed down while underwater. Is there a way to control this? For example make creatures walk in water freely like on the ground?
+[14:29] <Sirp> Fei-FW: yes, in the level file there are settings air_resistance and water_resistance
+[14:30] <Jetrel> Fei-FW:  Sirp should correct me if I'm wrong on this, since we "did it once and didn't have to alter it much", but ... yes, there's the part he described.
+[14:30] <Sirp> which control the amount of resistance air and water have on objects. Defaults are 20 for air and 100 for water
+[14:30] <Sirp> so you can do that
+[14:30] <Sirp> as for making them walk freely in water, yes absolutely, there's nothing in the engine that inherently causes "swimming" behavior in water -- that's all in how you script objects
+[14:30] <Jetrel> Fei-FW:  also, the reason creatures in frogatto don't sink, is because they *force* themselves into a specific set of animations the moment they enter water, and those animations are set to have no accel_y
+[14:31] <Jetrel> Fei-FW:  I should say specifically, they are set to have "accel_y: 0".  This makes them lose their gravity in water.
+[14:31] <Jetrel> They continue to have the same velocity they had before, but this velocity wanes quickly due to that "resistance in water" Sirp mentioned.
+[14:34] <Fei-FW> Sirp: level file there are settings air_resistance and water_resistance <-- Oh I see. But I also want to only enemies walk freely and player slow because water is their living space and player just a human uncomfortable in the water. Can I make a distinction?
+[14:35] <Jetrel> Fei-FW:  you can - individual creatures can be given values that correspond to this.
+[14:36] <Fei-FW> Jetrel: Great! Thanks a lot! :)
+[14:36] <Jetrel> Fei-FW:  we have two things:
+[14:37] <Jetrel> Fei-FW:  we have "traction_in_#whatever the medium_is#" and then "friction"
+[14:37] <Jetrel> Fei-FW:  friction is global and is the same for all mediums.  It makes their velocity slow down.
+[14:38] <Jetrel> Traction is different for each medium, and the way the calculation works, IIRC, is that it's multiplied (as if 1000 = 100%) against their acceleration.
+[14:39] <Jetrel> So e.g. traction_in_water: 2000 would make the same walking animation accelerate twice as fast if they had traction:1000 as their normal value (traction is just shorthand for "traction on land" - we don't have a special ending to the name)
+[14:40] <Jetrel> so if you had a green "swamp man", he would then accelerate 2x as fast when submerged.
+[14:41] <Jetrel> I think being submerged is calculated by the top point of something's solid area being under the water-line; some flexibility on this would be nice to have.
+[14:42] <Jetrel> Since I can see it being a *very* real use-case that people would want creatures only half-submerged to change their movement properties.
+[14:42] <Jetrel> Fei-FW:  traction_in_air is the other property;  it kicks in when something's feet aren't touching a solid tile.
+[14:43] <Fei-FW> I had "swamp mans" walking slow half submerged and player too.
+[14:45] <Fei-FW> Jetrel: Ah yes, Now I remember dealing with something like this in jump air control.
+[14:45] <Jetrel> Fei-FW: the idea is to have creatures - frogatto himself being a prime example, who can accelerate great on land, but who have little/no control when in the air.
+
+
+[13:39] <Jetrel> Sirp:  we seem to have a little "possible duplication of purpose" in a certain frogatto event:  we've got on_surface_damage and on_collide_damage
+[13:40] <Jetrel> I don't know which is intended to be "live", right now.
+[13:42] <Jetrel> Sirp:  well, this is kinda ancient code I didn't write - These deal with the player taking damage from "harmful tiles".
+[13:43] <Jetrel> I don't quite understand why we have ... two, though.
+[13:43] <Jetrel> Sirp:  the only change that's happened to these since strict mode is I put an arg in front of the surface_damage, in a quick-and-dirty attempt to fix it.
+[13:44] <Jetrel> So we've got:  on_surface_damage: "fire_event('collide_damage')",
+[13:44] <Jetrel> on_collide_damage: "if(not is_invincible, [
+[13:44] <Jetrel> 	add(hitpoints, dmg), blah, blah
+[13:44] <Jetrel> ] where dmg = arg.surface_damage)",
+[13:45] <Jetrel> It says I'm doing "illegal object access" on the surface_damage;  loosely I know what that means, but not specifically.
+[13:46] <Sirp> Jetrel: what error message are you getting exactly?
+[13:46] <Jetrel> I'm not sure if it means I'm accessing something that's not a valid symbol, or something that's a valid symbol but isn't accessible in this context
+[13:49] <Sirp> Jetrel: okay so what I'll do is make it so on_surface_damage gets arg.surface_damage defined
+[13:49] <Sirp> then when you fire the event you should pass that along
+[13:49] <Sirp> fire_event('collide_damage', {surface_damage: arg.surface_damage})
+[13:49] <Sirp> or we can just obsolete surface_damage as an event, possibly
+[13:49] <Jetrel> How again do I do that?  I'm ... oh, okay, that's exactly what I'd just tried. :D
+[13:50] <Sirp> and just have collide_damage
+[13:50] <Jetrel> Well, yeah - what IS the difference between the two?
+[13:50] <Sirp> yeah but it won't work until I add surface_damage
+[13:50] <Sirp> the difference is that on_collide_damage is fired when you *collide* with something that has a damage attribute
+[13:50] <Sirp> surface_damage is fired when you end up standing on something that has a damage attribute (even if it's not a collision, such as when you walk out onto it)
+[13:51] <Jetrel> Ahhhh
+[13:51] <Sirp> I'm not sure if surface_damage is really needed though
+[13:51] <Sirp> maybe just firing on_collide_damage in both cases is the best approach
+[13:51] <Jetrel> I'm ambivalent.
+[13:52] <Jetrel> So long as I comment in the distinction, it's fine to have something that doesn't make a lot of difference for frogatto-in-particular.
+[13:52] <Jetrel> But if you want to simplify it, that's cool - I can't speculate up a prospective use for that in a different game.
+[13:52] <irker485> anura-engine: David White anura:master a333ee377da0 / src/custom_object.cpp: deprecated on_surface_damage in favor of on_collide_damage http://git.io/yThfbw
+[13:52] <Sirp> Jetrel: there, try that. You should be able to just remove on_surface_damage
+[13:53] <Sirp> on_collide_damage will be fired by the engine where itw as being fired
+[13:54] <Jetrel> Okay.
+[13:54] <Jetrel> Sirp:  surface_damage remains the argument name?
+[13:56] <Sirp> Jetrel: yes
+[13:56] <Jetrel> great
+
+
+[08:46] <Jetrel> ActionJackalope:  no, the current hurt sound is _not_ the sound of the character getting wounded (like the physical sound of their body-material being damaged).  It used to be a while back - that used to be the only concept we had.
+[08:46] <ActionJackalope> Oh.  So it's supposed to be a bfxr simulation of a vocal?
+[08:47] <Jetrel> ActionJackalope:  now, however, we have two separate concepts - a sound for the creature's tissue itself taking damage (what we use for the damage types), and then a sound of the character itself vocalizing - like, squeaking in pain.
+[08:47] <Jetrel> ActionJackalope:  yeah, it was always kinda intended as that - I made it myself, but the current one we have is *really* 8-bit ish, and doesn't have much vocal tone to it.
+
+
+Restructured the logic on player damage responses so that players don't have to re-implement handle_damage, and instead just have a player-tier, and then a character-specific tier of handlers which are automatically called.
+https://github.com/frogatto/frogatto/commit/97028f6869df2f1d0c117724edbb0bf80e5b812f
+
+
+[05:08] <KristaS> and modules/data/icons.cfg
+[05:09] <DDR> And: Oh, cool, we have definitions! How would one use them? They can't be just for reference.
+[05:10] <KristaS> get_document() should work
+[05:10] <DDR> :|
+[05:11] <DDR> Took me a moment.
+[05:12] <KristaS> Though the file could probably be formatted as a map with the id as the key.
+[05:21] <DDR> KristaS: There, at least something good came of this all.
+[05:24] <KristaS> okay.
+[05:24] <KristaS> should be easy to use with get_document() now.
+
+
 [16:15] <Jetrel> I also suspect we'll need to keep level_controllers non-strict, or we'll essentially need to come up with some way to "cheat out of" the strict-mode requirement of "every variable must be named", for just doing random variable storage in them.
 [16:16] <Jetrel> i.e. {string -> any}
 [16:16] <Jetrel> Because that is really something they tend to get used for - I'd overwhelmingly opt for the latter, since strict mode would afford them a ton of benefits besides that.
