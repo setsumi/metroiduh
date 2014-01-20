@@ -1,3 +1,7 @@
+[07:54] <Jetrel> okay, yeah, there was a change in testing where the "anchors" - the secret hidden objects that make crates and such respawn were made visible for a bit, but that's gone now.
+[07:54] <Jetrel> They appear to work correctly on my machine.
+
+
 [14:29] <Fei-FW> Player and enemies are slowed down while underwater. Is there a way to control this? For example make creatures walk in water freely like on the ground?
 [14:29] <Sirp> Fei-FW: yes, in the level file there are settings air_resistance and water_resistance
 [14:30] <Jetrel> Fei-FW:  Sirp should correct me if I'm wrong on this, since we "did it once and didn't have to alter it much", but ... yes, there's the part he described.

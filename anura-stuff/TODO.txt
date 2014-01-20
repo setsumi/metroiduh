@@ -1,4 +1,10 @@
 TODO:
+Replace all cycle with level.cycle
+
+on_start_level: "if(level.cycle < time_last_hit, set(time_last_hit, 0))", <-- assert???
+
+
+
 Look into and implement?
 "Moved the haptic rumble effect to a place where it will only be triggered by the player getting hurt, not by 'any object in the game' getting hurt."
 https://github.com/frogatto/frogatto/commit/5db8e89442d7a7b1f0916171c3bead018d516eca
