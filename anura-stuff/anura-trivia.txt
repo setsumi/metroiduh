@@ -1,3 +1,7 @@
+[02:58] <KristaS> DDR: Something to try as a work-around. pass --resizable to anura. Then resize the window outside the editor first to make it bigger. Then hit ctrl-e a few times and see if that helps.
+[02:59] <DDR> KristaS: Like a charm.
+
+
 [07:54] <Jetrel> okay, yeah, there was a change in testing where the "anchors" - the secret hidden objects that make crates and such respawn were made visible for a bit, but that's gone now.
 [07:54] <Jetrel> They appear to work correctly on my machine.
 
