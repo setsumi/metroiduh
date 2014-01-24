@@ -1,3 +1,64 @@
+[17:41] <Sirp> Jetrel: so what's up? Off to bed soon but you can tell me the problem.
+[17:41] <Jetrel> Sirp:  so basically we have some head() back() functions, and they complain that they might be null
+[17:41] <Jetrel> Which makes sense.
+[17:41] <Jetrel> But the rote methods I have to deal with this seem really ... ugly.
+[17:42] <Sirp> okay...
+[17:42] <Jetrel> I'm wondering if there's a *nice* way to infer them having actual content.
+[17:43] <Sirp> well I'd have to see the code to see if there's a nicer way to do it...
+[17:43] <Sirp> why might head() and back() be null?
+[17:43] <Jetrel> https://raw2.github.com/frogatto/frogatto/master/data/objects/effects/control/heightmap_platform_controller.cfg
+[17:43] <Jetrel> Sirp:  because someone may have created a heightmap without any actual points in it.
+[17:44] <Jetrel> i.e. they may be working on it in the editor.
+[17:45] <Sirp> well one option is to just say that heightmap must ALWAYS contain some points. Initialize them with two points and require there to always be two points.
+[17:46] <Jetrel> ...  it is, and I like that option, but I don't think we currently have a way to enforce that in the editor.
+[17:46] <Jetrel> However, there does seem to be a more general issue, because I've had to deal with this in several objects...
+[17:46] <Jetrel> AFAIK, we don't have a type-inference for "a list having members"
+[17:46] <Jetrel> That is, it'd be nice to have something where we can do:
+[17:47] <Sirp> yeah I don't think we do.
+[17:47] <Sirp> and no there is no such thing as a type for "non empty list" or any other size of list
+[17:47] <Jetrel> if(size(my_list) > 0, list[some nice statically-guaranteed-to-be-safe-index] )
+[17:47] <Sirp> right, we don't do anything like that
+[17:48] <Jetrel> like, straight list accesses of course would be bad, since they're not statically guaranteed to be present.
+[17:48] <Jetrel> using array syntax.
+[17:48] <Jetrel> But map operations?  Those are guaranteed to all be valid indices.
+[17:49] <Jetrel> And some "relative accesses" like head/tail/etc are, for a non-empty list, also guaranteed to be values.
+[17:49] <Jetrel> (depending on their exact definition, but there are reasonable interpretations where certainly some of them do)
+[17:50] <Sirp> Jetrel: what I'd recommend is just checking like you do if(size(heightmap) >= 2
+[17:50] <Sirp> and then have some helper properties like:
+[17:50] <Sirp> first_height: "heightmap[0] asserting size(heightmap) > 0"
+[17:50] <Sirp> etc
+[17:50] * Jetrel nods.
+[17:50] <Sirp> and use them.
+[17:50] <Jetrel> Okay.
+[17:50] <Jetrel> I will try to do that. :)
+[17:51] <Sirp> we might one day introduce some more constraints on types such as list sizes
+[17:51] <Jetrel> Sirp:  one long-term hope I have, is that - - I've used frogatto here as a serious trial-by-fire for strict-mode, and I'm hoping you can, once we're done with the conversion, use it as a foil to improve strict mode.
+[17:51] <Sirp> yeah, definitely
+[17:52] <Jetrel> Sirp:  the bill is honestly quite favorable - there are relatively few "deep annoyances" with strict mode, which is far better than I'd expected.
+[17:52] <Jetrel> But yeah - if you managed to eliminate all of them, you'd ... be able to *strut*. :P
+[17:53] <Jetrel> Because then I think strict mode would really be something damned impressive as far as language designs go.
+[17:54] <Jetrel> type inference that actually is able to deal with the long tail of oddities would be really cool.
+[17:55] <Jetrel> I say this without any sort of deep familiarity with some other avante-garde languages out there, but I get the impression it'd have to be quite nice.
+[17:56] * Sirp nods
+
+
+[05:03] <Jetrel> [05:52:07]  <DDR>	 Something that worries me is how Sirp has a different style than we do."
+[05:07] <DDR> Jetrel: Oh! Yeah, his work on Citadel seems to be quite different than our recent work on Frogatto.
+[05:07] <DDR> Like, Citadel only has about a dozen objects.
+[05:07] <Jetrel> Yeah, because they don't do anything. :P
+[05:08] <KristaS> Well it has quite a few classes
+[05:08] <Jetrel> Virtually all the cards in the game amount to a few formulas - they don't need to be objects.
+[05:08] <Jetrel> It's actually a pretty clean system.
+[05:08] <DDR> Yeah.
+[05:08] <Jetrel> I try to use something similiar with variations when e.g. I have a dozen versions of "the same thing with different graphics/sounds".
+[05:09] <KristaS> The important point being that objects need a display, which on a MP server you don't have. classes don't require that, so classes are what is passed back and forth.
+[05:09] <DDR> Oh, cool.
+[05:10] <Jetrel> DDR:  but yeah, the complete and utter lack of any physics-based stuff, and any collision, etc, etc, _grossly_ simplifies what's necessary.
+[05:11] <Jetrel> It worried me at first, too - but after reading the code, it made sense, and hopefully we're emulating the more important style points.
+[05:11] <Jetrel> I've been trying to transition towards doing stuff more like citadel in a few key regards.
+[05:12] * DDR nods
+
+
 [02:58] <KristaS> DDR: Something to try as a work-around. pass --resizable to anura. Then resize the window outside the editor first to make it bigger. Then hit ctrl-e a few times and see if that helps.
 [02:59] <DDR> KristaS: Like a charm.
 
