@@ -1,3 +1,27 @@
+[10:44] <Sirp> Jetrel_: okay I fixed the return type on get_object() for you. Also added a new get_object_or_die() function which you might find useful.
+[10:46] <Jetrel_> Sirp:  die = assert?
+[10:47] <Sirp> Jetrel_: right
+[10:48] <Jetrel_> Sirp:  I take it the premise is to allow it to return "custom_obj" rather than "custom_obj|null" ?
+[10:48] <Sirp> Jetrel_: exactly
+[10:48] <Jetrel_> =]
+[10:48] <Sirp> a convenient function to call if you feel the object should always be there and don't want to worry about error handling.
+[10:51] <Jetrel_> Yeah.
+[10:51] <Jetrel_> I expect for a *LOT* of level scripts, this will be the norm.
+[10:52] <Jetrel_> Thank you - that's really useful. :)
+
+
+[10:16] <DDR> The curvy rope controller, and it's derivative the swaying rope controller, was meant to allow us to do more natural rigging. For example, in an area with a bit of wind, it would let us have loops of ropes hanging off trees or something.
+[10:16] <DDR> Or, a slack chain hanging between two platforms in the dungeon.
+[10:20] <DDR> There was also a curved pipe controller based on the same tech, way back when, but it was bizarre. We didn't have good editor support for point paths back then, so you had to place a bunch of objects and give them the exact right IDs.
+[10:20] <DDR> The idea was to have Frogatto be sucked through them like in Sonic.
+[10:21] <DDR> Or to allow hoses to carry fluid and frogs around. :3
+[10:21] <DDR> We actually did carry over the idea somewhat in the kitty-factory levels.
+[10:21] <DDR> But in a simplified, much-easier-to-program form.
+[10:23] <DDR> Many years ago, we had a wave controller - it rose and fell, like a wave in a wave pool, and pushed you up and down with it. We even had a rising acid level!
+[10:23] <vultraz> DDR: surfing frogatto?? :O
+[10:23] <DDR> I believe all those controllers fell into disrepair and got deleted, though. It was a horrible abuse of the water system, anyway.
+
+
 [17:41] <Sirp> Jetrel: so what's up? Off to bed soon but you can tell me the problem.
 [17:41] <Jetrel> Sirp:  so basically we have some head() back() functions, and they complain that they might be null
 [17:41] <Jetrel> Which makes sense.

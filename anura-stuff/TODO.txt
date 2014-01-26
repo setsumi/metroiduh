@@ -1,4 +1,5 @@
 TODO:
+
 Replace all cycle with level.cycle
 
 on_start_level: "if(level.cycle < time_last_hit, set(time_last_hit, 0))", <-- assert???
@@ -12,6 +13,7 @@ https://github.com/frogatto/frogatto/commit/5db8e89442d7a7b1f0916171c3bead018d51
 https://github.com/frogatto/frogatto/commit/b91da43d4eb16d4dabf94cc5c8a730d127c80092
 
 DONE:
+has_feet can disable ground traction in water????!!!! <-- FAIL
 
 water image:
 http://www.pasteall.org/pic/65334
