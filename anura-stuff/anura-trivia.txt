@@ -1,3 +1,65 @@
+[18:50] <ActionJackalope> Jetrel: What are the limitations for things that can be given an on_talk?
+[18:50] <Jetrel> ActionJackalope:  afaik, only those things which inherit from our NPC prototype - the prototype (I think) is what contains the code that actually makes frogatto do his nice, clean "walk to the side, then start the conversation" code.
+[18:51] <Jetrel> ActionJackalope:  this is why, in order to make the bookshelves readable, we made them inherit from this prototype.
+[18:51] <ActionJackalope> Oh, okay.  So there's nothing I could quickly copypaste to an object to make it interactable?
+[18:52] <Jetrel> Broadly speaking, it's possible to allow frogatto to interact with anything, including speaking dialogue - we just don't get the nice "walk to the side" behavior (and the really slick automation) without on_talk.
+[18:52] <Jetrel> ActionJackalope:  to do it more generally, you can use "on_interact".  Anything can do that as long as it has an "interact_area" in the animation frame you want to talk to it in.
+[18:52] <Jetrel> (which should probably be interact_area:  "all",
+[18:53] <Jetrel> Whatcha planning? :)
+[18:53] <ActionJackalope> MmmÉ if I can get this working on my own, I'll just surprise you :P
+[18:53] <Jetrel> Okay. :)
+[18:55] <ActionJackalope> So interact_area:  "all", should go under properties?
+[18:55] <Jetrel> no.
+[18:55] <Jetrel> ActionJackalope:  to do it more generally, you can use "on_interact".  Anything can do that as long as it has an "interact_area" in the animation frame you want to talk to it in.
+[18:55] <Jetrel> "in the animation frame"
+
+
+[18:20] <KristaS> Jetrel: Try stripped_core_names: "unique(map(available_audio_files, regex_replace(value, ~\\d+\\.(wav|ogg)~, '') ))",
+[18:21] <Jetrel> okay, figured out the nuttiness with the regex - stuff in the local file was being doubly escaped.
+[18:21] <Jetrel> KristaS:  ahh, thank you. :)
+
+
+[17:24] <Jetrel> DDR:  Sirp:  do we have a simple function to filter a list (of strings) for unique values?
+[17:24] <Sirp> Jetrel: unique()
+[17:24] <Sirp> Jetrel: note that it sorts the input list.
+[17:24] <Jetrel> Cool, sorting won't hurt. :)
+
+
+[10:11] <DDR> What is vpx?
+[10:12] <KristaS> DDR: http://en.wikipedia.org/wiki/VP8
+[10:12] <DDR> ~oo~
+[10:13] <DDR> Finally, I can do away with the WVF! :D
+[10:13] <KristaS> It's only a basic playback interface at the moment
+[10:13] <KristaS> But stuff like set_widgets(me, {type:'movie', filename:'movies/big_buck_bunny_trailer.ivf', rect:[100,100,640,360]})
+[10:13] <KristaS> should work
+[10:14] <DDR> Which, I guess would be completely unreasonable of me to not explain, was the Wesnoth Video Format written in WML. It was as stupid as it sounds.
+[10:14] <marcavis> Got any evil/non-evil future plans for that support in the future? :)
+[10:15] <KristaS> for what support?
+[10:16] <marcavis> video support
+[10:16] * KristaS points marcavis to the set of patches that i just pushed
+[10:17] <KristaS> That adds a VP8 playback widget
+[10:20] <KristaS> you need to sudo apt-get install libvpx-dev
+[10:20] <KristaS> and rebuild against that
+[10:22] <Sirp_> nice! :)
+
+
+[17:31] <DDR> It's a function that lets you set a bunch of properties at once, by passing in a map. How do I explicitly say that I don't especially expect a key/value pair to be there?
+[17:32] <DDR> It checks to see if a key is in the map by calling keys(), and looking at the result.
+[17:34] <DDR> Is there a way to specify the type of a map, to have "if key 'passepartout', value must be bool, but it's OK if there is no key"?
+[17:36] <Sirp> DDR: yeah you give the value as bool|null
+[17:37] <DDR> Awesome. :)
+
+
+[16:17] <Jetrel_> level controllers are now strict.
+[16:17] <Jetrel_> so when they do "get_object(object's name)", you can't be sure the object is really gonna be there.
+[16:18] <Jetrel_> so we now have a function that says "I'm absolutely 100% sure this object should be here, don't worry".
+[16:18] <Jetrel_> "get_object_or_die()"
+[16:19] <Jetrel_> if that object isn't, in fact, there, it actually will assert immediately, instead of failing silently and continuing.
+[16:19] <Jetrel_> Which is nice if, as it is in many cases, the failure would render the game uncompletable (like a gate failing to unlock because it didn't get found by the right name).
+-      "on_start_level": "[set(level.zoom, 0.6),fire_event(get_object(level, 'camera1'),'triggered'),die()]",
++      "on_start_level": "[set(level.zoom, 0.6),fire_event(get_object_or_die(level, 'camera1'),'triggered'),die()]",
+
+
 [10:44] <Sirp> Jetrel_: okay I fixed the return type on get_object() for you. Also added a new get_object_or_die() function which you might find useful.
 [10:46] <Jetrel_> Sirp:  die = assert?
 [10:47] <Sirp> Jetrel_: right
